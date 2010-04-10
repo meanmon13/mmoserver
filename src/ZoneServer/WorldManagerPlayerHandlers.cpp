@@ -62,6 +62,8 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "Utils/VariableTimeScheduler.h"
 #include "Utils/utils.h"
 
+#include "WorldClock.h"
+
 //======================================================================================================================
 
 void  WorldManager::initPlayersInRange(Object* object,PlayerObject* player)
@@ -143,7 +145,7 @@ void WorldManager::savePlayer(uint32 accId,bool remove, WMLogOut mLogout, Charac
 	//which will return its callback to the worldmanager
 
 	//if no buff was there to be saved we will continue directly
-	if(!gBuffManager->SaveBuffsAsync(asyncContainer, this, playerObject, GetCurrentGlobalTick()))
+	if(!gBuffManager->SaveBuffsAsync(asyncContainer, this, playerObject, gWorldClock->GetCurrentGlobalTick()))
 	{
 
 		// position save will be called by the buff callback if there is any buff
@@ -195,7 +197,7 @@ void WorldManager::savePlayerSync(uint32 accId,bool remove)
 								playerObject->getId()));
 
 
-	gBuffManager->SaveBuffs(playerObject, GetCurrentGlobalTick());
+	gBuffManager->SaveBuffs(playerObject, gWorldClock->GetCurrentGlobalTick());
 
 	if(remove)
 		destroyObject(playerObject);

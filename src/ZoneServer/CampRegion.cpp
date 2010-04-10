@@ -15,6 +15,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "QTRegion.h"
 #include "QuadTree.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "ZoneTree.h"
 #include "MessageLib/MessageLib.h"
 
@@ -25,6 +26,11 @@ struct CampRegion::campLink
 	uint32 tickCount;
 	uint64 lastSeenTime;
 };
+
+uint64 CampRegion::getUpTime()
+{
+	return((gWorldClock->GetCurrentGlobalTick() - mSetUpTime)/1000);
+}
 
 //=============================================================================
 
@@ -41,7 +47,7 @@ mQTRegion(NULL)
 	mXp				= 0;
 
 	
-	mSetUpTime = gWorldManager->GetCurrentGlobalTick();
+	mSetUpTime = gWorldClock->GetCurrentGlobalTick();
 }
 
 //=============================================================================
@@ -55,7 +61,7 @@ CampRegion::~CampRegion()
 void CampRegion::update()
 {
 	//Camps have a max timer of 55 minutes
-	if(gWorldManager->GetCurrentGlobalTick() - mSetUpTime > 3300000)
+	if(gWorldClock->GetCurrentGlobalTick() - mSetUpTime > 3300000)
 	{
 		//gLogger->logMsg("55 Minutes OLD! DEATH TO THE CAMP!", BACKGROUND_RED);
 		despawnCamp();
@@ -64,7 +70,7 @@ void CampRegion::update()
 
 	if(mAbandoned)
 	{
-		if((gWorldManager->GetCurrentGlobalTick() >= mExpiresTime) && (!mDestroyed))
+		if((gWorldClock->GetCurrentGlobalTick() >= mExpiresTime) && (!mDestroyed))
 		{
 			despawnCamp();
 		}
@@ -82,7 +88,7 @@ void CampRegion::update()
 	{
 		//abandon
 		mAbandoned	= true;
-		mExpiresTime	= gWorldManager->GetCurrentGlobalTick(); //There is no grace period for combat.
+		mExpiresTime	= gWorldClock->GetCurrentGlobalTick(); //There is no grace period for combat.
 		return;
 	}
 
@@ -139,7 +145,7 @@ void CampRegion::update()
 				//gLogger->logMsg("CREATING A NEW LINK!");
 				campLink* temp = new campLink;
 				temp->objectID = object->getId();
-				temp->lastSeenTime = gWorldManager->GetCurrentGlobalTick();
+				temp->lastSeenTime = gWorldClock->GetCurrentGlobalTick();
 				temp->tickCount = 0;
 
 				links.push_back(temp);
@@ -156,7 +162,7 @@ void CampRegion::update()
 				if((*i)->objectID == object->getId())
 				{
 
-					(*i)->lastSeenTime = gWorldManager->GetCurrentGlobalTick();
+					(*i)->lastSeenTime = gWorldClock->GetCurrentGlobalTick();
 
 					if((*i)->tickCount == 15)
 					{
@@ -203,7 +209,7 @@ void CampRegion::update()
 
 	while(i != links.end())
 	{
-		if(gWorldManager->GetCurrentGlobalTick() - (*i)->lastSeenTime >= 30000)
+		if(gWorldClock->GetCurrentGlobalTick() - (*i)->lastSeenTime >= 30000)
 		{
 			//gLogger->logMsg("ERASING AN ENTRY!");
 			delete (*i);
@@ -271,7 +277,7 @@ void CampRegion::onObjectLeave(Object* object)
 
 		//We want to have this camp die after the owner has been gone longer 
 		//than he stayed in the camp, with a max of two minutes.
-		uint64 mTempCurrentTime = gWorldManager->GetCurrentGlobalTick();
+		uint64 mTempCurrentTime = gWorldClock->GetCurrentGlobalTick();
 
 		if((mTempCurrentTime - mSetUpTime) > 120000)
 			mExpiresTime = mTempCurrentTime + 120000;

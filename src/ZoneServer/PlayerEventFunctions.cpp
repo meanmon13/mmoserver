@@ -30,7 +30,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "Common/Message.h"
 #include "Common/MessageFactory.h"
 #include "MathLib/Quaternion.h"
-
+#include "WorldClock.h"
 #include "utils/rand.h"
 
 //=============================================================================
@@ -232,12 +232,12 @@ void PlayerObject::onSample(const SampleEvent* event)
 		//this should be a timed debuff per instance -- Do not cause wounds unless potential energy >= 500
 		
 		BuffAttribute* healthdebuffAttribute = new BuffAttribute(Health, -(int)hamReduc,0,hamReduc); 
-		Buff* healthdebuff = Buff::SimpleBuff(this, this, 300000, 0, gWorldManager->GetCurrentGlobalTick());
+		Buff* healthdebuff = Buff::SimpleBuff(this, this, 300000, 0, gWorldClock->GetCurrentGlobalTick());
 		healthdebuff->AddAttribute(healthdebuffAttribute);	
 		this->AddBuff(healthdebuff,true);
 
 		healthdebuffAttribute = new BuffAttribute(Action, -(int)hamReduc,0,hamReduc); 
-		healthdebuff = Buff::SimpleBuff(this, this, 300000, 0, gWorldManager->GetCurrentGlobalTick());
+		healthdebuff = Buff::SimpleBuff(this, this, 300000, 0, gWorldClock->GetCurrentGlobalTick());
 		healthdebuff->AddAttribute(healthdebuffAttribute);	
 		this->AddBuff(healthdebuff,true);
 		

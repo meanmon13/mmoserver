@@ -25,6 +25,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "Weapon.h"
 #include "WorldConfig.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "LogManager/LogManager.h"
 #include "DatabaseManager/Database.h"
 #include "DatabaseManager/DatabaseResult.h"
@@ -650,7 +651,7 @@ PlayerObject* PlayerObjectFactory::_createPlayer(DatabaseResult* result)
 	// update race / gender mask
 	playerObject->updateRaceGenderMask(playerObject->getGender());
 
-	gBuffManager->LoadBuffs(playerObject, gWorldManager->GetCurrentGlobalTick());
+	gBuffManager->LoadBuffs(playerObject, gWorldClock->GetCurrentGlobalTick());
 
 	// Start tutorial, if any.
 	playerObject->startTutorial();

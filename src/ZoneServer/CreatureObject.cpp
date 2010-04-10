@@ -22,6 +22,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "UIManager.h"
 #include "Vehicle.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "WorldConfig.h"
 #include "ZoneTree.h"
 #include "ZoneServer/Tutorial.h"
@@ -1392,7 +1393,7 @@ void CreatureObject::makePeaceWithDefender(uint64 defenderId)
 
 uint32	CreatureObject::UpdatePerformanceCounter()
 {
-	return (uint32) gWorldManager->GetCurrentGlobalTick();
+	return (uint32) gWorldClock->GetCurrentGlobalTick();
 }
 
 Object* CreatureObject::getTarget() const

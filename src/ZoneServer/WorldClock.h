@@ -39,3 +39,5 @@ private:
 
 	Database*								mDatabase;
 };
+
+#define gWorldClock WorldClock::getSingleton()

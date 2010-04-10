@@ -15,6 +15,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "MissionManager.h"
 #include "PlayerObject.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 
 #include "MessageLib/MessageLib.h"
 
@@ -353,7 +354,7 @@ void Buff::InitializeIcons()
 			if(mIcon > 0) //if internal buff
 			{
 				//make sure the time is updated in case we travel with the shuttle on the planet
-				uint64 time = gWorldManager->GetCurrentGlobalTick() - mStartTime;
+				uint64 time = gWorldClock->GetCurrentGlobalTick() - mStartTime;
 				gMessageLib->sendPlayerAddBuff(Player, mIcon, (float)((mTick-time)/1000));
 			}
 		}

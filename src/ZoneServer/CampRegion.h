@@ -52,7 +52,7 @@ class CampRegion : public RegionObject
 				void	setCamp(uint64 id){mCampId = id;}
 				uint64	getCamp(){return mCampId;}
 
-				uint64	getUpTime(){return((gWorldManager->GetCurrentGlobalTick() - mSetUpTime)/1000);}
+				uint64	getUpTime();
 				
 				uint32	getVisitors(){return(mVisitorSet.size());}
 				uint32	getCurrentVisitors(){return(mKnownPlayers.size());}

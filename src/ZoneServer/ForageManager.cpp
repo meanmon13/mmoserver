@@ -6,6 +6,7 @@
 #include "PlayerObject.h"
 #include "MedicManager.h"
 #include "ScoutManager.h"
+#include "WorldClock.h"
 
 #include "MessageLib/MessageLib.h"
 
@@ -140,7 +141,7 @@ void ForageManager::startForage(PlayerObject* player, forageClasses forageClass)
 	player->getHam()->updatePropertyValue(HamBar_Action,HamProperty_CurrentHitpoints, -100);
 
 	//Creates a ForageAttempt object for tracking the forage operation
-	ForageAttempt* attempt = new ForageAttempt(player, gWorldManager->GetCurrentGlobalTick(), forageClass);
+	ForageAttempt* attempt = new ForageAttempt(player, gWorldClock->GetCurrentGlobalTick(), forageClass);
 
 	//FIND THE APPROPRIATE FORAGEPocket
 	ForagePocket* it = pHead;
@@ -180,7 +181,7 @@ void ForageManager::forageUpdate()
 	ForagePocket* previousHead = NULL;
 	while(it != NULL)
 	{
-		if(it->updateAttempts(gWorldManager->GetCurrentGlobalTick())) //If true we delete this Pocket
+		if(it->updateAttempts(gWorldClock->GetCurrentGlobalTick())) //If true we delete this Pocket
 		{
 			//gLogger->logMsg("FORAGING TICK", FOREGROUND_RED);
 			if(previousHead == NULL)

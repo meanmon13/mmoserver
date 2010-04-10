@@ -16,6 +16,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "PlayerObject.h"
 #include "WorldConfig.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "ZoneServer/Tutorial.h"
 #include "DatabaseManager/Database.h"
 #include "MessageLib/MessageLib.h"
@@ -147,7 +148,7 @@ void Food::handleFoodUse(Object* srcObject)
 
 		//get a stomach Buff to handle the filling
 		BuffAttribute* foodAttribute = new BuffAttribute(Food_Filling, +filling,0,-(int)filling); 
-		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, 300000, 0, gWorldManager->GetCurrentGlobalTick());
+		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, 300000, 0, gWorldClock->GetCurrentGlobalTick());
 		foodBuff->AddAttribute(foodAttribute);	
 		playerObject->AddBuff(foodBuff,true);
 
@@ -173,7 +174,7 @@ void Food::handleFoodUse(Object* srcObject)
 
 		//get a stomach Buff to handle the filling
 		BuffAttribute* foodAttribute = new BuffAttribute(Drink_Filling, +filling,0,-(int)filling); 
-		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, 300000, 0, gWorldManager->GetCurrentGlobalTick());
+		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, 300000, 0, gWorldClock->GetCurrentGlobalTick());
 		foodBuff->AddAttribute(foodAttribute);	
 		playerObject->AddBuff(foodBuff,true);
 		
@@ -238,7 +239,7 @@ void Food::_handleHealth_Buff(PlayerObject* playerObject)
 		duration = static_cast<uint32>(this->getAttribute<float>("duration"));
 		//get a stomach Buff to handle the filling
 		BuffAttribute* foodAttribute = new BuffAttribute(Health, +amount,0,-(int)amount); 
-		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, duration*1000, mIcon, gWorldManager->GetCurrentGlobalTick());
+		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, duration*1000, mIcon, gWorldClock->GetCurrentGlobalTick());
 		foodBuff->AddAttribute(foodAttribute);	
 		playerObject->AddBuff(foodBuff,true);
 	}
@@ -258,7 +259,7 @@ void Food::_handleMind_Buff(PlayerObject* playerObject)
 		duration = static_cast<uint32>(this->getAttribute<float>("duration"));
 		//get a stomach Buff to handle the filling
 		BuffAttribute* foodAttribute = new BuffAttribute(Mind, +amount,0,-(int)amount); 
-		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, duration*1000, mIcon, gWorldManager->GetCurrentGlobalTick());
+		Buff* foodBuff = Buff::SimpleBuff(playerObject, playerObject, duration*1000, mIcon, gWorldClock->GetCurrentGlobalTick());
 		foodBuff->AddAttribute(foodAttribute);	
 		playerObject->AddBuff(foodBuff,true);
 	}

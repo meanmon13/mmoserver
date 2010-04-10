@@ -28,6 +28,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "UIManager.h"
 #include "WaypointObject.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "ZoneTree.h"
 
 #include "LogManager/LogManager.h"
@@ -764,7 +765,7 @@ void MissionManager::checkMusicianMission(PlayerObject* player)
 				if(player->mPosition.inRange2D(mission->getDestination().Coordinates,20))
 				{
 					BuffAttribute* performance_timer = new BuffAttribute(Mission_Timer, 0,0,0);
-					Buff* timer = Buff::SimpleBuff(player, player, 600000, 0, gWorldManager->GetCurrentGlobalTick());
+					Buff* timer = Buff::SimpleBuff(player, player, 600000, 0, gWorldClock->GetCurrentGlobalTick());
 					timer->AddAttribute(performance_timer);
 					player->AddBuff(timer);
 					mission->setInProgress(true);
@@ -793,7 +794,7 @@ void MissionManager::checkDancerMission(PlayerObject* player)
 				if(player->mPosition.inRange2D(mission->getDestination().Coordinates,20))
 				{
 					BuffAttribute* performance_timer = new BuffAttribute(Mission_Timer, 0,0,0);
-					Buff* timer = Buff::SimpleBuff(player, player, 600000, 0, gWorldManager->GetCurrentGlobalTick());
+					Buff* timer = Buff::SimpleBuff(player, player, 600000, 0, gWorldClock->GetCurrentGlobalTick());
 					timer->AddAttribute(performance_timer);
 					player->AddBuff(timer);
 					mission->setInProgress(true);

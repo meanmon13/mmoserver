@@ -20,7 +20,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "UIManager.h"
 #include "WorldManager.h"
 #include "Weapon.h"
-
+#include "WorldClock.h"
 #include "MessageLib/MessageLib.h"
 #include "DatabaseManager/Database.h"
 #include "DatabaseManager/DatabaseResult.h"
@@ -1510,7 +1510,7 @@ void EntertainerManager::stopWatching(PlayerObject* audience,bool ooRange)
 
 				//yay!!! we got ourselves a buff!!!
 				BuffAttribute* mindAttribute = new BuffAttribute(Mind, +mind,0,-(int)mind);
-				Buff* mindBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceMind, gWorldManager->GetCurrentGlobalTick());
+				Buff* mindBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceMind, gWorldClock->GetCurrentGlobalTick());
 				mindBuff->AddAttribute(mindAttribute);
 				audience->AddBuff(mindBuff,true);
 
@@ -1616,12 +1616,12 @@ void EntertainerManager::stopListening(PlayerObject* audience,bool ooRange)
 
 				//yay!!! we got ourselves a buff!!!
 				BuffAttribute* focusAttribute = new BuffAttribute(Focus, +focus,0,-(int)focus);
-				Buff* focusBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceFocus, gWorldManager->GetCurrentGlobalTick());
+				Buff* focusBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceFocus, gWorldClock->GetCurrentGlobalTick());
 				focusBuff->AddAttribute(focusAttribute);
 				audience->AddBuff(focusBuff,true);
 
 				BuffAttribute* willAttribute = new BuffAttribute(Willpower, +will,0,-(int)will);
-				Buff* willBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceWill, gWorldManager->GetCurrentGlobalTick());
+				Buff* willBuff = Buff::SimpleBuff(audience, audience, time*1000, opBACRC_PerformanceWill, gWorldClock->GetCurrentGlobalTick());
 				willBuff->AddAttribute(willAttribute);
 				audience->AddBuff(willBuff,true);
 
@@ -1729,7 +1729,7 @@ void EntertainerManager::startListening(PlayerObject* audience, PlayerObject* en
 		BuffStruct* buff = new(BuffStruct);
 
 		buff->buffLengthSeconds = 0;
-		buff->buffStart			= gWorldManager->GetCurrentGlobalTick();
+		buff->buffStart			= gWorldClock->GetCurrentGlobalTick();
 		buff->buffType			= EMBuff_Secondary;
 		buff->buffValuePercent	= 0;
 		buff->customer			= audience->getId();
@@ -1825,7 +1825,7 @@ void EntertainerManager::startWatching(PlayerObject* audience, PlayerObject* ent
 		BuffStruct* buff = new(BuffStruct);
 
 		buff->buffLengthSeconds = 0;
-		buff->buffStart			= gWorldManager->GetCurrentGlobalTick();
+		buff->buffStart			= gWorldClock->GetCurrentGlobalTick();
 		buff->buffType			= EMBuff_Primary;
 		buff->buffValuePercent	= 0;
 		buff->customer			= audience->getId();

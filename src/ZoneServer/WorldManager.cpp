@@ -78,9 +78,6 @@ WorldManager::WorldManager(uint32 zoneId,ZoneServer* zoneServer,Database* databa
 , mTotalObjectCount(0)
 , mZoneId(zoneId)
 {
-	WorldClock::Init(database);
-	mClock = WorldClock::getSingleton();
-
 	gLogger->logMsg("WorldManager::StartUp");
 
 	// set up spatial index
@@ -339,49 +336,6 @@ RegionObject* WorldManager::getRegionById(uint64 regionId)
 		gLogger->logMsgF("Worldmanager::getRegionById: Could not find region %"PRIu64"",MSG_NORMAL,regionId);
 
 	return(NULL);
-}
-
-
-//======================================================================================================================
-//get the current tick
-//
-
-uint64 WorldManager::GetCurrentGlobalTick()
-{
-	return mClock->GetCurrentGlobalTick();
-}
-
-//======================================================================================================================
-//still synch issues to adress with other servers
-//
-
-void WorldManager::LoadCurrentGlobalTick()
-{
-	uint64 Tick;
-	DatabaseResult* temp = mDatabase->ExecuteSynchSql("SELECT Global_Tick_Count FROM galaxy WHERE galaxy_id = '2'");
-
-	DataBinding*	tickbinding = mDatabase->CreateDataBinding(1);
-	tickbinding->addField(DFT_uint64,0,8,0);
-
-	temp->GetNextRow(tickbinding,&Tick);
-	mDatabase->DestroyDataBinding(tickbinding);
-	mDatabase->DestroyResult(temp);
-
-	char strtemp[100];
-	sprintf(strtemp, "Current Global Tick Count = %"PRIu64"\n",Tick);
-	gLogger->logMsg(strtemp, FOREGROUND_GREEN);
-	mTick = Tick;
-	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleTick),7,1000,NULL);
-}
-
-//======================================================================================================================
-//
-//
-
-bool	WorldManager::_handleTick(uint64 callTime,void* ref)
-{
-	mTick += 1000;
-	return true;
 }
 
 //======================================================================================================================

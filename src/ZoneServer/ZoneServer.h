@@ -20,7 +20,7 @@ class NetworkManager;
 class Service;
 class DatabaseManager;
 class Database;
-
+class WorldClock;
 class MessageDispatch;
 class CharacterLoginHandler;
 class ObjectControllerDispatch;
@@ -69,6 +69,8 @@ class ZoneServer
 		MessageDispatch*              mMessageDispatch;
 		CharacterLoginHandler*        mCharacterLoginHandler;
 		ObjectControllerDispatch*     mObjectControllerDispatch;
+
+		WorldClock*						mWorldClock;
 };
 
 //======================================================================================================================

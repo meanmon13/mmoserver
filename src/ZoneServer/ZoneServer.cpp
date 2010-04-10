@@ -34,6 +34,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "TravelMapHandler.h"
 #include "UIManager.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "WorldConfig.h"
 
 // External references
@@ -76,12 +77,15 @@ mRouterService(0),
 mDatabase(0)
 {
 	Anh_Utils::Clock::Init();
-	
+
 	// gLogger->logMsgF("ZoneServer - %s Startup %s",MSG_NORMAL,zoneName,GetBuildString());
 	gLogger->logMsg("ZoneServer Startup", FOREGROUND_GREEN | FOREGROUND_RED);
 
 	// Create and startup our core services.
 	mDatabaseManager = new DatabaseManager();
+
+	WorldClock::Init(database);
+	mWorldClock = WorldClock::getSingleton();
 
 	mNetworkManager = new NetworkManager();
 

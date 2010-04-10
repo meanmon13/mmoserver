@@ -336,13 +336,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		bool					checkdNpId(uint64 id);
 		uint64					getRandomNpNpcIdSequence();
 
-		//get the current tick
-		uint64					GetCurrentGlobalTick();
-
-		//load the tick from db
-		void					LoadCurrentGlobalTick();
-
-		bool					_handleTick(uint64 callTime,void* ref);
 		bool					_getFastDebugLoad(){return mDebug;}
 
 		void					removePlayerMovementUpdateTime(PlayerObject* player);
@@ -450,8 +443,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		Anh_Utils::Scheduler*		mObjControllerScheduler;
 		Anh_Utils::Scheduler*		mPlayerScheduler;
 		Anh_Utils::Scheduler*		mSubsystemScheduler;
-		
-		WorldClock*					mClock;
 
 		ZoneTree*								mSpatialIndex;
 		ZoneServer*					mZoneServer;
@@ -459,7 +450,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		uint64						mNonPersistantId;
 		uint64						mObjControllersProcessTimeLimit;
 		uint64						mServerTime;
-		uint64						mTick;
 		uint32						mTotalObjectCount;
 		uint32						mZoneId;
 		

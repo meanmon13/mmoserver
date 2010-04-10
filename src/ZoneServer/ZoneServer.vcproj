@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="ZoneServer"
 	ProjectGUID="{003C0A20-ACBE-498D-A674-3938FF4AF5AB}"
 	RootNamespace="Zoneserver"
@@ -1555,31 +1555,11 @@
 				Name="World"
 				>
 				<File
-					RelativePath=".\WorldManager.cpp"
+					RelativePath=".\WorldClock.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorldManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorldManagerDataBaseHandlers.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorldManagerEnums.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorldManagerNPCHandlers.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorldManagerObjectHandlers.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorldManagerPlayerHandlers.cpp"
+					RelativePath=".\WorldClock.h"
 					>
 				</File>
 				<Filter
@@ -1647,6 +1627,38 @@
 					</File>
 					<File
 						RelativePath=".\WorldConfig.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Manager"
+					>
+					<File
+						RelativePath=".\WorldManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManagerDataBaseHandlers.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManagerEnums.h"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManagerNPCHandlers.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManagerObjectHandlers.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\WorldManagerPlayerHandlers.cpp"
 						>
 					</File>
 				</Filter>

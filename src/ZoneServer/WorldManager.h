@@ -23,7 +23,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 #include "MathLib/Rectangle.h"
 
-#include "Utils/TimerCallback.h"
 #include "Utils/typedefs.h"
 
 #include <boost/ptr_container/ptr_unordered_map.hpp>
@@ -54,6 +53,7 @@ class ZoneServer;
 class Ham;
 class Buff;
 class MissionObject;
+class WorldClock;
 
 //======================================================================================================================
 
@@ -144,7 +144,7 @@ class WMQueryContainer
 //
 // WorldManager
 //
-class WorldManager : public ObjectFactoryCallback, public DatabaseCallback, public TimerCallback
+class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 {
 	public:
 
@@ -164,9 +164,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback, publ
 
 		// ObjectFactoryCallback
 		virtual void			handleObjectReady(Object* object,DispatchClient* client);
-
-		// TimerCallback
-		virtual void			handleTimer(uint32 id, void* container);
 
 		// add / delete an object, make sure to cleanup any other references
 		float					_GetMessageHeapLoadViewingRange();
@@ -442,8 +439,9 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback, publ
 		Weather									mCurrentWeather;
 		ScriptEventListener			mWorldScriptsListener;
 		Anh_Utils::Scheduler*		mAdminScheduler;
-		Anh_Utils::VariableTimeScheduler* mBuffScheduler;
 		Database*								mDatabase;
+		
+		Anh_Utils::VariableTimeScheduler* mBuffScheduler;
 		Anh_Utils::Scheduler*		mEntertainerScheduler;
 		Anh_Utils::Scheduler*		mScoutScheduler;
 		Anh_Utils::Scheduler*		mHamRegenScheduler;
@@ -451,8 +449,11 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback, publ
 		Anh_Utils::Scheduler*		mNpcManagerScheduler;
 		Anh_Utils::Scheduler*		mObjControllerScheduler;
 		Anh_Utils::Scheduler*		mPlayerScheduler;
-		ZoneTree*								mSpatialIndex;
 		Anh_Utils::Scheduler*		mSubsystemScheduler;
+		
+		WorldClock*					mClock;
+
+		ZoneTree*								mSpatialIndex;
 		ZoneServer*					mZoneServer;
 		WMState						mState;
 		uint64						mNonPersistantId;

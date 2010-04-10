@@ -49,6 +49,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "Shuttle.h"
 #include "ForageManager.h"
 #include "TicketCollector.h"
+#include "WorldClock.h"
 #include "ConfigManager/ConfigManager.h"
 #include "DatabaseManager/Database.h"
 #include "DatabaseManager/DataBinding.h"
@@ -77,6 +78,9 @@ WorldManager::WorldManager(uint32 zoneId,ZoneServer* zoneServer,Database* databa
 , mTotalObjectCount(0)
 , mZoneId(zoneId)
 {
+	WorldClock::Init(database);
+	mClock = WorldClock::getSingleton();
+
 	gLogger->logMsg("WorldManager::StartUp");
 
 	// set up spatial index
@@ -344,7 +348,7 @@ RegionObject* WorldManager::getRegionById(uint64 regionId)
 
 uint64 WorldManager::GetCurrentGlobalTick()
 {
-	return mTick;
+	return mClock->GetCurrentGlobalTick();
 }
 
 //======================================================================================================================
@@ -418,6 +422,7 @@ void WorldManager::_processSchedulers()
 	mMissionScheduler->process();
 	mNpcManagerScheduler->process();
 	mAdminScheduler->process();
+	mClock->ProcessScheduledTasks();
 }
 
 //======================================================================================================================
@@ -831,14 +836,6 @@ bool WorldManager::_handleAdminRequests(uint64 callTime, void* ref)
 	}
 
 	return true;
-}
-
-
-//======================================================================================================================
-
-void WorldManager::handleTimer(uint32 id, void* container)
-{
-
 }
 
 //======================================================================================================================

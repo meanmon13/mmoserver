@@ -84,9 +84,6 @@ mDatabase(0)
 	// Create and startup our core services.
 	mDatabaseManager = new DatabaseManager();
 
-	WorldClock::Init(database);
-	mWorldClock = WorldClock::getSingleton();
-
 	mNetworkManager = new NetworkManager();
 
 	// Connect to the DB and start listening for the RouterServer.
@@ -141,6 +138,9 @@ mDatabase(0)
 
 	// Place all startup code here.
 	mMessageDispatch = new MessageDispatch(mRouterService);
+
+	WorldClock::Init(mDatabase);
+	mWorldClock = WorldClock::getSingleton();
 
 	WorldConfig::Init(zoneId,mDatabase,zoneName);
 	ObjectControllerCommandMap::Init(mDatabase);
@@ -262,6 +262,7 @@ void ZoneServer::Process(void)
 	// Process our game modules
 	mObjectControllerDispatch->Process();
 	gWorldManager->Process();
+	mWorldClock->ProcessScheduledTasks();
 	gScriptEngine->process();
 	mMessageDispatch->Process();
 

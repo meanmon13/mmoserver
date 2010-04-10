@@ -109,9 +109,6 @@ WorldManager::WorldManager(uint32 zoneId,ZoneServer* zoneServer,Database* databa
 	mNpcManagerScheduler	= new Anh_Utils::Scheduler();
 	mAdminScheduler			= new Anh_Utils::Scheduler();
 
-	LoadCurrentGlobalTick();
-
-
 	// preallocate
 	mvClientEffects.reserve(1000);
 	mvMoods.reserve(200);
@@ -376,7 +373,6 @@ void WorldManager::_processSchedulers()
 	mMissionScheduler->process();
 	mNpcManagerScheduler->process();
 	mAdminScheduler->process();
-	mClock->ProcessScheduledTasks();
 }
 
 //======================================================================================================================

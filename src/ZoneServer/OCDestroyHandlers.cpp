@@ -29,6 +29,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "WorldConfig.h"
 #include "UIManager.h"
 
+#include "CraftingManager.h"
 #include "MessageLib/MessageLib.h"
 #include "LogManager/LogManager.h"
 #include "Common/Message.h"
@@ -238,7 +239,7 @@ void ObjectController::_handleDestroyCraftingTool(CraftingTool* tool)
 
 	if(Item* currentToolItem = tool->getCurrentItem())
 	{
-		gWorldManager->removeBusyCraftTool(tool);
+		gCraftingManager->removeBusyCraftTool(tool);
 
 		gMessageLib->sendDestroyObject(currentToolItem->getId(),dynamic_cast<PlayerObject*>(mObject));
 		gObjectFactory->deleteObjectFromDB(currentToolItem);

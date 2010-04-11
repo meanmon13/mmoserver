@@ -12,28 +12,23 @@ namespace Anh_Utils
 class WorldClock
 {
 public:
-	static void									Init(Database* database);
-	static WorldClock*								getSingleton();
-	static void									destroySingleton();
-
-	//void									AddTask();
-	//void									AddVariableTimeTask();
+	static void								Init(Database* database);
+	static WorldClock*						getSingleton();
+	static void								destroySingleton();
 	void									ProcessScheduledTasks();
-
 	uint64									GetCurrentGlobalTick();
+	bool									handleTick(uint64 callTime,void* ref);
 
 	static WorldClock*						mSingleton;
-	
-	bool									handleTick(uint64 callTime,void* ref);
+
+	Anh_Utils::VariableTimeScheduler*		mVariableTimeScheduler;
+	Anh_Utils::Scheduler*					mScheduler;
 
 private:
 											WorldClock(Database* database);
 											//~WorldClock();
 
 	void									_LoadCurrentGlobalTick();
-
-	Anh_Utils::VariableTimeScheduler*		mVariableTimeScheduler;
-	Anh_Utils::Scheduler*					mScheduler;
 
 	uint64									mTick;
 

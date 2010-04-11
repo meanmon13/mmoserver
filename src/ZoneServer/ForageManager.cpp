@@ -175,7 +175,7 @@ void ForageManager::startForage(PlayerObject* player, forageClasses forageClass)
 	//gLogger->logMsg("NEW FORAGING ATTEMPT", FOREGROUND_RED);
 }
 
-void ForageManager::forageUpdate()
+bool ForageManager::forageUpdate(uint64 calltime, void* ref)
 {
 	ForagePocket* it = pHead;
 	ForagePocket* previousHead = NULL;
@@ -198,6 +198,8 @@ void ForageManager::forageUpdate()
 		if(it != NULL)
 			it = it->pNext;
 	}
+
+	return true;
 }
 
 

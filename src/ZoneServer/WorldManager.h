@@ -16,15 +16,10 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "QTRegion.h"
 #include "Weather.h"
 #include "WorldManagerEnums.h"
-
 #include "ScriptEngine/ScriptEventListener.h"
-
 #include "DatabaseManager/DatabaseCallback.h"
-
 #include "MathLib/Rectangle.h"
-
 #include "Utils/typedefs.h"
-
 #include <boost/ptr_container/ptr_unordered_map.hpp>
 
 #include <list>
@@ -85,9 +80,6 @@ typedef std::map<uint64, uint64>				PlayerMovementUpdateMap;
 typedef std::map<uint64, uint64>				CreatureObjectDeletionMap;
 typedef std::map<uint64, uint64>				PlayerObjectReviveMap;
 
-// a list of busy craft tools needing regular updates
-typedef std::vector<uint64>						CraftTools;
-
 // Creature spawn regions.
 typedef std::map<uint64, const CreatureSpawnRegion*>	CreatureSpawnRegionMap;
 
@@ -98,7 +90,6 @@ typedef std::map<uint64, const CreatureSpawnRegion*>	CreatureSpawnRegionMap;
 typedef std::map<uint64, uint64>				NpcDormantHandlers;
 typedef std::map<uint64, uint64>				NpcReadyHandlers;
 typedef std::map<uint64, uint64>				NpcActiveHandlers;
-typedef std::map<uint64, uint64>				AdminRequestHandlers;
 
 // AttributeKey map
 typedef std::map<uint32,string>					AttributeKeyMap;
@@ -236,10 +227,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		// adds a shuttle
 		void					addShuttle(Shuttle* shuttle){ mShuttleList.push_back(shuttle); }
 
-		// add / remove busy crafting tools
-		void					addBusyCraftTool(CraftingTool* tool);
-		void					removeBusyCraftTool(CraftingTool* tool);
-
 		// add / remove expired npc conversations.
 		void					addNpcConversation(uint64 interval, NPCObject* npc);
 
@@ -262,9 +249,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 
 		void					addActiveNpc(uint64 creature, uint64 when);
 		void					removeActiveNpc(uint64 creature);
-
-		void					addAdminRequest(uint64 requestId, uint64 when);
-		void					cancelAdminRequest(int32 requestId);
 
 		const					Anh_Math::Rectangle getSpawnArea(uint64 spawnRegionId);
 
@@ -365,10 +349,8 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		bool	_handleShuttleUpdate(uint64 callTime,void* ref);
 		bool	_handleDisconnectUpdate(uint64 callTime,void* ref);
 		bool	_handleRegionUpdate(uint64 callTime,void* ref);
-		bool	_handleCraftToolTimers(uint64 callTime,void* ref);
 		bool	_handleNpcConversionTimers(uint64 callTime,void* ref);
 		bool	_handleFireworkLaunchTimers(uint64 callTime,void* ref);
-		bool	_handleScoutForagingUpdate(uint64 callTime, void* ref);
 
 		bool	_handlePlayerMovementUpdateTimers(uint64 callTime, void* ref);
 
@@ -378,8 +360,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		bool	_handleDormantNpcs(uint64 callTime, void* ref);
 		bool	_handleReadyNpcs(uint64 callTime, void* ref);
 		bool	_handleActiveNpcs(uint64 callTime, void* ref);
-
-		bool	_handleAdminRequests(uint64 callTime, void* ref);
 
 		void	_startWorldScripts();
 
@@ -400,7 +380,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 
 		boost::pool<boost::default_user_allocator_malloc_free>	mWM_DB_AsyncPool;
 
-		AdminRequestHandlers		mAdminRequestHandlers;
 		CreatureObjectDeletionMap	mCreatureObjectDeletionMap;
 		CreatureSpawnRegionMap		mCreatureSpawnRegionMap;
 		NpcActiveHandlers			mNpcActiveHandlers;
@@ -421,7 +400,6 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		BStringVector				mvSounds;
 		BStringVector				mvTrnFileNames;
 		ActiveRegions				mActiveRegions;
-		CraftTools					mBusyCraftTools;
 		std::vector<std::pair<string,uint32> >	mvNpcChatter;
 		NpcConversionTimers			mNpcConversionTimers;
 		PlayerList					mPlayersToRemove;
@@ -429,7 +407,7 @@ class WorldManager : public ObjectFactoryCallback, public DatabaseCallback
 		ShuttleList					mShuttleList;
 		ScriptList					mWorldScripts;
 		CreatureQueue				mObjControllersToProcess;
-		Weather									mCurrentWeather;
+		Weather						mCurrentWeather;
 		ScriptEventListener			mWorldScriptsListener;
 		Anh_Utils::Scheduler*		mAdminScheduler;
 		Database*								mDatabase;

@@ -17,7 +17,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "BuffManager.h"
 #include "CellObject.h"
 #include "CharSheetManager.h"
-#include "CraftingSessionFactory.h"
+#include "CraftingManager.h"
 #include "CraftingStation.h"
 #include "Datapad.h"
 #include "DraftSchematic.h"
@@ -210,7 +210,7 @@ PlayerObject::~PlayerObject()
 	}
 
 	// make sure we don't leave a crafting session open
-	gCraftingSessionFactory->destroySession(mCraftingSession);
+	gCraftingManager->destroySession(mCraftingSession);
 	this->setCraftingSession(NULL);
 	this->toggleStateOff(CreatureState_Crafting);
 	this->setCraftingStage(0);

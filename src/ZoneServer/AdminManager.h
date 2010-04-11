@@ -19,7 +19,8 @@ Copyright (c) 2006 - 2010 The swgANH Team
 class AdminRequestObject;
 class MessageDispatch;
 
-typedef std::map<uint64, AdminRequestObject*> AdminRequests;
+typedef std::map<uint64, AdminRequestObject*>	AdminRequests;
+typedef std::map<uint64, uint64>				AdminRequestHandlers;
 
 enum AdminRequestt
 {
@@ -44,15 +45,9 @@ class AdminManager : public MessageDispatchCallback
 				mInstance = NULL;
 			}
 		}
-		virtual void handleDispatchMessage(uint32 opcode,Message* message,DispatchClient* client);
+
 		void registerCallbacks(void);
 		void unregisterCallbacks(void);
-		void _processScheduleShutdown(Message* message, DispatchClient* client);
-		void _processCancelScheduledShutdown(Message* message, DispatchClient* client);
-
-		uint64 handleAdminRequest(uint64 requestId, uint64 timeOverdue);
-		void addAdminRequest(uint64 type, string message, int32 ttl);
-		void cancelAdminRequest(uint64 type, string message);
 
 		bool shutdownPending(void) { return mPendingShutdown;}
 		bool shutdownZone(void) { return mTerminateServer;}
@@ -72,6 +67,8 @@ class AdminManager : public MessageDispatchCallback
 		MessageDispatch* mMessageDispatch;
 		bool	mPendingShutdown;
 		bool	mTerminateServer;
+
+		
 };
 
 //=============================================================================

@@ -10,7 +10,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 */
 
 #include "ZoneServer.h"
-#include "AdminManager.h"
 #include "BuffManager.h"
 #include "CharacterLoginHandler.h"
 #include "CharSheetManager.h"
@@ -36,6 +35,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "WorldManager.h"
 #include "WorldClock.h"
 #include "WorldConfig.h"
+#include "CraftingManager.h"
 
 // External references
 #include "MessageLib/MessageLib.h"
@@ -163,7 +163,12 @@ mDatabase(0)
 												// The object will create itself upon first usage,
 	(void)NonPersistentNpcFactory::Instance();
 
-	(void)ForageManager::Instance();
+	ForageManager::Instance();
+	mWorldClock->mScheduler->addTask(fastdelegate::MakeDelegate(gForageManager,&ForageManager::forageUpdate),7,2000, NULL);
+
+	CraftingManager::Init(mDatabase);
+	mWorldClock->mScheduler->addTask(fastdelegate::MakeDelegate(gCraftingManager, &CraftingManager::Process), 5, 2000, NULL);
+
 	(void)ScoutManager::Instance();
 	(void)NonPersistantObjectFactory::Instance();
 
@@ -174,7 +179,6 @@ mDatabase(0)
 	TradeManager::Init(mDatabase,mMessageDispatch);
 	BuffManager::Init(mDatabase);
 	MedicManager::Init(mMessageDispatch);
-	AdminManager::Init(mMessageDispatch);
 	EntertainerManager::Init(mDatabase,mMessageDispatch);
 	GroupManager::Init(mDatabase,mMessageDispatch);
 	StructureManager::Init(mDatabase,mMessageDispatch);
@@ -203,7 +207,6 @@ ZoneServer::~ZoneServer(void)
 	gTravelMapHandler->Shutdown();
 	gTradeManager->Shutdown();
 	delete mObjectControllerDispatch;
-	AdminManager::deleteManager();
 
 	gWorldManager->Shutdown();	// Should be closed before script engine and script support, due to halting of scripts.
 	gScriptEngine->shutdown();
@@ -368,11 +371,7 @@ int main(int argc, char* argv[])
 	// Main loop
 	while(1)
 	{
-		if(AdminManager::Instance()->shutdownZone())
-		{
-			break;
-		}
-		else if (Anh_Utils::kbhit())
+		if (Anh_Utils::kbhit())
 		{
 			if(std::cin.get() == 'q')
 			{

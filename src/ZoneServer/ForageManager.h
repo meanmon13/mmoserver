@@ -72,7 +72,7 @@ public:
 	}
 
 	//foraging
-	void forageUpdate();
+	bool forageUpdate(uint64 calltime, void* ref);
 	void startForage(PlayerObject* player, forageClasses);
 	static void failForage(PlayerObject* player, forageFails fail);
 	static void ForageManager::successForage(PlayerObject* player, forageClasses forageClass);

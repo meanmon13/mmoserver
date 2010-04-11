@@ -16,26 +16,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 #include "Utils/utils.h"
 
-
-//=============================================================================
-
-bool						CraftingSessionFactory::mInsFlag    = false;
-CraftingSessionFactory*		CraftingSessionFactory::mSingleton  = NULL;
-
-//======================================================================================================================
-
-CraftingSessionFactory*	CraftingSessionFactory::Init(Database* database)
-{
-	if(!mInsFlag)
-	{
-		mSingleton = new CraftingSessionFactory(database);
-		mInsFlag = true;
-		return mSingleton;
-	}
-	else
-		return mSingleton;
-}
-
 //=============================================================================
 
 CraftingSessionFactory::CraftingSessionFactory(Database* database) :
@@ -48,8 +28,6 @@ mSessionPool(sizeof(CraftingSession))
 
 CraftingSessionFactory::~CraftingSessionFactory()
 {
-	mInsFlag = false;
-	delete(mSingleton);
 }
 
 //=============================================================================

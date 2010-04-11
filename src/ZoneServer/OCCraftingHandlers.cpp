@@ -10,7 +10,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 */
 
 #include "BankTerminal.h"
-#include "CraftingSessionFactory.h"
+#include "CraftingManager.h"
 #include "CraftingTool.h"
 #include "CurrentResource.h"
 #include "Item.h"
@@ -192,7 +192,7 @@ void ObjectController::_handleRequestCraftingSession(uint64 targetId,Message* me
 	}
 
 	gLogger->logMsgF("ObjController::handleRequestcraftingsession: new session :)",MSG_NORMAL);
-	playerObject->setCraftingSession(gCraftingSessionFactory->createSession(Anh_Utils::Clock::getSingleton(),playerObject,tool,station,expFlag));
+	playerObject->setCraftingSession(gCraftingManager->createSession(Anh_Utils::Clock::getSingleton(),playerObject,tool,station,expFlag));
 }
 
 //======================================================================================================================
@@ -214,7 +214,7 @@ void ObjectController::_handleSelectDraftSchematic(uint64 targetId,Message* mess
 	{
 		if(swscanf(dataStr.getUnicode16(),L"%u",&schematicIndex) != 1 || !session->selectDraftSchematic(schematicIndex))
 		{
-			gCraftingSessionFactory->destroySession(session);
+			gCraftingManager->destroySession(session);
 		}
 	}
 }
@@ -232,7 +232,7 @@ void ObjectController::_handleCancelCraftingSession(uint64 targetId,Message* mes
 
 	/*uint32			counter			= */message->getUint32();
 
-	gCraftingSessionFactory->destroySession(playerObject->getCraftingSession());
+	gCraftingManager->destroySession(playerObject->getCraftingSession());
 
 	gLogger->logMsg("session canceled");
 	//client complains over crafting tool already hacing an item when we go out of the slot screen!!!!!
@@ -391,7 +391,7 @@ void ObjectController::_handleNextCraftingStage(uint64 targetId,Message* message
 		uint32 resultCount = swscanf(dataStr.getUnicode16(),L"%u",&counter);
 		if(resultCount != 1)
 		{
-			gCraftingSessionFactory->destroySession(session);
+			gCraftingManager->destroySession(session);
 			return;
 		}
 		gLogger->logMsgF("Counter We Got: %u", MSG_NORMAL, counter);
@@ -459,7 +459,7 @@ void ObjectController::_handleCreatePrototype(uint64 targetId,Message* message,O
 
 	if(swscanf(dataStr.getUnicode16(),L"%u %u",&counter,&mode) != 2)
 	{
-		gCraftingSessionFactory->destroySession(player->getCraftingSession());
+		gCraftingManager->destroySession(player->getCraftingSession());
 		return;
 	}
 
@@ -485,7 +485,7 @@ void ObjectController::_handleCreateManufactureSchematic(uint64 targetId,Message
 
 	if(swscanf(dataStr.getUnicode16(),L"%u",&counter) != 1)
 	{
-		gCraftingSessionFactory->destroySession(player->getCraftingSession());
+		gCraftingManager->destroySession(player->getCraftingSession());
 		return;
 	}
 

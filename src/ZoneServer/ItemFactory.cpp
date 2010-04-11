@@ -37,6 +37,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "DatabaseManager/DatabaseResult.h"
 #include "DatabaseManager/DataBinding.h"
 #include "WorldConfig.h"
+#include "CraftingManager.h"
 
 #include "Utils/utils.h"
 
@@ -385,7 +386,7 @@ void ItemFactory::_postProcessAttributes(Object* object)
 					//we will do that in the inventory :)
 					//gMessageLib->sendUpdateTimer(item,item->getOwner());
 
-					gWorldManager->addBusyCraftTool((CraftingTool*)item);
+					gCraftingManager->addBusyCraftTool((CraftingTool*)item);
 				}
 				else
 				{

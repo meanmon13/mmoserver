@@ -29,6 +29,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "ResourceManager.h"
 #include "SchematicManager.h"
 #include "WorldManager.h"
+#include "CraftingManager.h"
 
 #include "MessageLib/MessageLib.h"
 
@@ -269,7 +270,7 @@ void CraftingSession::handleDatabaseJobComplete(void* ref,DatabaseResult* result
 		
 
 				gMessageLib->sendUpdateTimer(mTool,mOwner);
-				gWorldManager->addBusyCraftTool(mTool);
+				gCraftingManager->addBusyCraftTool(mTool);
 
 				// make sure we don't delete it on session destroy
 				mTool->setCurrentItem(mItem);
@@ -299,7 +300,7 @@ void CraftingSession::handleDatabaseJobComplete(void* ref,DatabaseResult* result
 				mDatabase->DestroyDataBinding(binding);
 				delete(qContainer);
 
-				gCraftingSessionFactory->destroySession(this);
+				gCraftingManager->destroySession(this);
 
 				return;
 			}
@@ -857,7 +858,7 @@ void CraftingSession::createPrototype(uint32 noPractice,uint32 counter)
 		mTool->setAttributeIncDB("craft_tool_status","@crafting:tool_status_working");
 
 		gMessageLib->sendUpdateTimer(mTool,mOwner);
-		gWorldManager->addBusyCraftTool(mTool);
+		gCraftingManager->addBusyCraftTool(mTool);
 
 		// just ack
 		gMessageLib->sendCraftAcknowledge(opCreatePrototypeResponse,CraftCreate_Success,static_cast<uint8>(counter),mOwner);
@@ -1177,3 +1178,6 @@ void CraftingSession::createManufactureSchematic(uint32 counter)
 
 	destroyComponents();
 }
+
+//=============================================================================
+

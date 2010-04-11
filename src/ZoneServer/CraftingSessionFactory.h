@@ -18,8 +18,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 //=============================================================================
 
-#define 	gCraftingSessionFactory	CraftingSessionFactory::getSingletonPtr()
-
 class CraftingSession;
 class CraftingStation;
 class CraftingTool;
@@ -36,22 +34,13 @@ namespace Anh_Utils
 class CraftingSessionFactory
 {
 	public:
-
-		static CraftingSessionFactory*	getSingletonPtr() { return mSingleton; }
-		static CraftingSessionFactory*	Init(Database* database);
-
+		CraftingSessionFactory(Database* database);
 		~CraftingSessionFactory();
 
 		CraftingSession*		createSession(Anh_Utils::Clock* clock,PlayerObject* player,CraftingTool* tool,CraftingStation* station,uint32 expFlag);
 		void					destroySession(CraftingSession* session);
 
 	private:
-
-		CraftingSessionFactory(Database* database);
-
-		static CraftingSessionFactory*	mSingleton;
-		static bool						mInsFlag;
-
 		Database*						mDatabase;
 
 		boost::pool<boost::default_user_allocator_malloc_free>	mSessionPool;

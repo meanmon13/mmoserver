@@ -11,7 +11,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 #include "PlayerObject.h"
 #include "WorldManager.h"
-#include "AdminManager.h"
 #include "Buff.h"
 #include "BuffEvent.h"
 #include "BuffManager.h"
@@ -20,8 +19,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "CharacterLoginHandler.h"
 #include "Container.h"
 #include "ConversationManager.h"
-#include "CraftingSessionFactory.h"
-#include "CraftingTool.h"
 #include "CreatureSpawnRegion.h"
 #include "GroupManager.h"
 #include "GroupObject.h"
@@ -123,7 +120,6 @@ WorldManager::WorldManager(uint32 zoneId,ZoneServer* zoneServer,Database* databa
 	ResourceCollectionManager::Init(database);
 	TreasuryManager::Init(database);
 	ConversationManager::Init(database);
-	CraftingSessionFactory::Init(database);
     MissionManager::Init(database,mZoneId);
 
 	// register world script hooks
@@ -213,7 +209,6 @@ void WorldManager::Shutdown()
 	mNpcDormantHandlers.clear();
 	mNpcReadyHandlers.clear();
 	mNpcActiveHandlers.clear();
-	mAdminRequestHandlers.clear();
 
 	// Handle creature spawn regions. These objects are not registred in the normal object map.
 	CreatureSpawnRegionMap::iterator it = mCreatureSpawnRegionMap.begin();
@@ -553,98 +548,6 @@ bool WorldManager::_handleServerTimeUpdate(uint64 callTime,void* ref)
 
 //======================================================================================================================
 //
-// update busy crafting tools, called every 2 seconds
-//
-bool WorldManager::_handleCraftToolTimers(uint64 callTime,void* ref)
-{
-	CraftTools::iterator it = mBusyCraftTools.begin();
-
-	while(it != mBusyCraftTools.end())
-	{
-		CraftingTool*	tool	=	dynamic_cast<CraftingTool*>(getObjectById((*it)));
-		if(!tool)
-		{
-			gLogger->logMsgF("WorldManager::_handleCraftToolTimers missing crafting tool :(",MSG_NORMAL);
-			it = mBusyCraftTools.erase(it);
-			continue;
-		}
-
-		PlayerObject*	player	=	dynamic_cast<PlayerObject*>(getObjectById(tool->getParentId() - 1));
-		Item*			item	= tool->getCurrentItem();
-
-		if(player)
-		{
-			// we done, create the item
-			if(!tool->updateTimer(callTime))
-			{
-				// add it to the world, if it holds an item
-				if(item)
-				{
-					Inventory* temp =  dynamic_cast<Inventory*>(player->getEquipManager()->getEquippedObject(CreatureEquipSlot_Inventory));
-					if(!temp) continue;
-
-					item->setParentId(temp->getId());
-					dynamic_cast<Inventory*>(player->getEquipManager()->getEquippedObject(CreatureEquipSlot_Inventory))->addObject(item);
-					gWorldManager->addObject(item,true);
-
-					gMessageLib->sendCreateTangible(item,player);
-
-					tool->setCurrentItem(NULL);
-				}
-				//in case of logout/in interplanetary travel it will be in the inventory already
-
-				gMessageLib->sendUpdateTimer(tool,player);
-
-				it = mBusyCraftTools.erase(it);
-				tool->setAttribute("craft_tool_status","@crafting:tool_status_ready");
-				mDatabase->ExecuteSqlAsync(0,0,"UPDATE item_attributes SET value='@crafting:tool_status_ready' WHERE item_id=%"PRIu64" AND attribute_id=18",tool->getId());
-
-				tool->setAttribute("craft_tool_time",boost::lexical_cast<std::string>(tool->getTimer()));
-				gWorldManager->getDatabase()->ExecuteSqlAsync(0,0,"UPDATE item_attributes SET value='%i' WHERE item_id=%"PRIu64" AND attribute_id=%u",tool->getId(),tool->getTimer(),AttrType_CraftToolTime);
-
-				continue;
-			}
-			// update the time display
-			gMessageLib->sendUpdateTimer(tool,player);
-
-			tool->setAttribute("craft_tool_time",boost::lexical_cast<std::string>(tool->getTimer()));
-			//gLogger->logMsgF("timer : %i",MSG_HIGH,tool->getTimer());
-			gWorldManager->getDatabase()->ExecuteSqlAsync(0,0,"UPDATE item_attributes SET value='%i' WHERE item_id=%"PRIu64" AND attribute_id=%u",tool->getId(),tool->getTimer(),AttrType_CraftToolTime);
-		}
-
-		++it;
-	}
-
-	return(true);
-}
-
-//======================================================================================================================
-
-void WorldManager::addBusyCraftTool(CraftingTool* tool)
-{
-	mBusyCraftTools.push_back(tool->getId());
-}
-
-//======================================================================================================================
-
-void WorldManager::removeBusyCraftTool(CraftingTool* tool)
-{
-	CraftTools::iterator it = mBusyCraftTools.begin();
-
-	while(it != mBusyCraftTools.end())
-	{
-		if((*it) == tool->getId())
-		{
-			mBusyCraftTools.erase(it);
-			break;
-		}
-
-		++it;
-	}
-}
-
-//======================================================================================================================
-//
 //	Add a timed entry for deletion of dead creature objects.
 //
 void WorldManager::addCreatureObjectForTimedDeletion(uint64 creatureId, uint64 when)
@@ -670,13 +573,6 @@ void WorldManager::addCreatureObjectForTimedDeletion(uint64 creatureId, uint64 w
 	}
 	// gLogger->logMsgF("Adding new object with id %"PRIu64"",MSG_NORMAL, creatureId);
 	mCreatureObjectDeletionMap.insert(std::make_pair(creatureId, expireTime + when));
-}
-
-
-bool WorldManager::_handleScoutForagingUpdate(uint64 callTime, void* ref)
-{
-	gForageManager->forageUpdate();
-	return true;
 }
 
 //======================================================================================================================
@@ -718,74 +614,6 @@ void WorldManager::updateWeather(float cloudX,float cloudY,float cloudZ,uint32 w
 	mCurrentWeather.mClouds.mZ = cloudZ;
 
 	gMessageLib->sendWeatherUpdate(mCurrentWeather.mClouds,mCurrentWeather.mWeather);
-}
-
-//======================================================================================================================
-//
-//	Add an admin request.
-//
-
-void WorldManager::addAdminRequest(uint64 requestId, uint64 when)
-{
-	gLogger->logMsgF("Adding admin request %d for schedule in %"PRIu64" minutes(s) and %"PRIu64" second(s)", MSG_NORMAL, requestId, when/60000, when % 60000);
-
-	uint64 expireTime = Anh_Utils::Clock::getSingleton()->getLocalTime();
-	mAdminRequestHandlers.insert(std::make_pair(requestId, expireTime + when));
-
-}
-
-//======================================================================================================================
-//
-//	Cancel an admin request.
-//
-
-void WorldManager::cancelAdminRequest(int32 requestId)
-{
-	AdminRequestHandlers::iterator it = mAdminRequestHandlers.find(requestId);
-
-	if (it != mAdminRequestHandlers.end())
-	{
-		// Cancel shutdown.
-		mAdminRequestHandlers.erase(it);
-	}
-}
-
-//======================================================================================================================
-//
-// Handle the queue with admin requests.
-//
-
-bool WorldManager::_handleAdminRequests(uint64 callTime, void* ref)
-{
-
-	// callTime = callTime - (callTime % 1000)
-	AdminRequestHandlers::iterator it = mAdminRequestHandlers.begin();
-	while (it != mAdminRequestHandlers.end())
-	{
-		//  The timer has expired?
-		if (callTime >= ((*it).second))
-		{
-			// Yes, handle it.
-			uint64 waitTime = AdminManager::Instance()->handleAdminRequest(((*it).first), callTime - ((*it).second));
-
-			if (waitTime)
-			{
-				// Set next execution time.
-				(*it).second = callTime + waitTime;
-			}
-			else
-			{
-				gLogger->logMsgF("Removed expired handler for admin request %d", MSG_NORMAL, (*it).first);
-
-				// Requested to remove the handler.
-				mAdminRequestHandlers.erase(it++);
-				continue;
-			}
-		}
-		++it;
-	}
-
-	return true;
 }
 
 //======================================================================================================================
@@ -843,7 +671,6 @@ void WorldManager::_handleLoadComplete()
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleServerTimeUpdate),9,gWorldConfig->getServerTimeInterval()*1000,NULL);
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleDisconnectUpdate),1,1000,NULL);
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleRegionUpdate),2,2000,NULL);
-	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleCraftToolTimers),3,1000,NULL);
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleNpcConversionTimers),8,1000,NULL);
 	
 	//is this really necessary ?
@@ -852,7 +679,6 @@ void WorldManager::_handleLoadComplete()
 	
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleGeneralObjectTimers),5,2000,NULL);
 	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleGroupObjectTimers),5,gWorldConfig->getGroupMissionUpdateTime(),NULL);
-	mSubsystemScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleScoutForagingUpdate),7,2000, NULL);
 
 	// Init NPC Manager, will load lairs from the DB.
 	(void)NpcManager::Instance();
@@ -861,9 +687,6 @@ void WorldManager::_handleLoadComplete()
 	mNpcManagerScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleDormantNpcs),5,2500,NULL);
 	mNpcManagerScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleReadyNpcs),5,1000,NULL);
 	mNpcManagerScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleActiveNpcs),5,250,NULL);
-
-	// Initialize static creature lairs.
-	mAdminScheduler->addTask(fastdelegate::MakeDelegate(this,&WorldManager::_handleAdminRequests),5,5000,NULL);
 }
 
 //======================================================================================================================

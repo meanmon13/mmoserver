@@ -21,7 +21,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "CharacterLoginHandler.h"
 #include "Container.h"
 #include "ConversationManager.h"
-#include "CraftingSessionFactory.h"
+#include "CraftingManager.h"
 #include "CraftingTool.h"
 #include "CreatureSpawnRegion.h"
 #include "Datapad.h"
@@ -283,7 +283,7 @@ void WorldManager::addDisconnectedPlayer(PlayerObject* playerObject)
 	removeCreatureHamToProcess(playerObject->getHam()->getTaskId());
 	removeEntertainerToProcess(playerObject->getEntertainerTaskId());
 
-	gCraftingSessionFactory->destroySession(playerObject->getCraftingSession());
+	gCraftingManager->destroySession(playerObject->getCraftingSession());
 	playerObject->setCraftingSession(NULL);
 	playerObject->toggleStateOff(CreatureState_Crafting);
 

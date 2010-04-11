@@ -17,6 +17,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "MessageLib/MessageLib.h"
 #include "WorldManager.h"
 #include "CraftingTool.h"
+#include "CraftingManager.h"
 
 #include <cassert>
 
@@ -62,8 +63,7 @@ ObjectContainer::~ObjectContainer()
 		{
 			if(tool->getCurrentItem())
 			{
-				gWorldManager->removeBusyCraftTool(tool);
-
+				gCraftingManager->removeBusyCraftTool(tool);
 			}
 		}
 

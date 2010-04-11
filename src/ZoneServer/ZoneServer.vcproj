@@ -2127,6 +2127,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CraftingManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CraftingManager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\CraftingSession.cpp"
 					>
 				</File>
@@ -2558,22 +2566,6 @@
 						>
 					</File>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="Admin"
-				>
-				<File
-					RelativePath=".\AdminManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AdminManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\OCAdminHandlers.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Forage"

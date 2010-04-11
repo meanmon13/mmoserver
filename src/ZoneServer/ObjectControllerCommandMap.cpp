@@ -464,13 +464,13 @@ void ObjectControllerCommandMap::_registerCppHooks()
 	mCommandMap.insert(std::make_pair(opOCEndBurstRun,&ObjectController::_endBurstRun));
 
 	// admin profession
-	mCommandMap.insert(std::make_pair(opOCAdminSysMsg,&ObjectController::_handleAdminSysMsg));
-	mCommandMap.insert(std::make_pair(opOCAdminWarpSelf,&ObjectController::_handleAdminWarpSelf));
-	mCommandMap.insert(std::make_pair(opOCAdminBroadcast,&ObjectController::_handleBroadcast));
-	mCommandMap.insert(std::make_pair(opOCAdminBroadcastPlanet,&ObjectController::_handleBroadcastPlanet));
-	mCommandMap.insert(std::make_pair(opOCAdminBroadcastGalaxy,&ObjectController::_handleBroadcastGalaxy));
-	mCommandMap.insert(std::make_pair(opOCAdminShutdownGalaxy,&ObjectController::_handleShutdownGalaxy));
-	mCommandMap.insert(std::make_pair(opOCAdminCancelShutdownGalaxy,&ObjectController::_handleCancelShutdownGalaxy));
+	//mCommandMap.insert(std::make_pair(opOCAdminSysMsg,&ObjectController::_handleAdminSysMsg));
+	//mCommandMap.insert(std::make_pair(opOCAdminWarpSelf,&ObjectController::_handleAdminWarpSelf));
+	//mCommandMap.insert(std::make_pair(opOCAdminBroadcast,&ObjectController::_handleBroadcast));
+	//mCommandMap.insert(std::make_pair(opOCAdminBroadcastPlanet,&ObjectController::_handleBroadcastPlanet));
+	//mCommandMap.insert(std::make_pair(opOCAdminBroadcastGalaxy,&ObjectController::_handleBroadcastGalaxy));
+	//mCommandMap.insert(std::make_pair(opOCAdminShutdownGalaxy,&ObjectController::_handleShutdownGalaxy));
+	//mCommandMap.insert(std::make_pair(opOCAdminCancelShutdownGalaxy,&ObjectController::_handleCancelShutdownGalaxy));
 
 	//Structures
 	mCommandMap.insert(std::make_pair(opOCPlaceStructure,&ObjectController::_handleStructurePlacement));

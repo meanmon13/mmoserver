@@ -241,11 +241,11 @@ if %MSVC_VERSION%x == x (
 	if exist "%PROGRAMFILES(X86)%\Microsoft Visual Studio 10.0" (
 		set MSVC_VERSION=10
 	) else if exist "%PROGRAMFILES%\Microsoft Visual Studio 10.0" (
-		set MSVC_VERSION=10		
+		set MSVC_VERSION=10
 	) else if exist "%PROGRAMFILES(X86)%\Microsoft Visual Studio 9.0" (
-		set MSVC_VERSION=9	
+		set MSVC_VERSION=9
 	) else if exist "%PROGRAMFILES%\Microsoft Visual Studio 9.0" (
-		set MSVC_VERSION=9	
+		set MSVC_VERSION=9
 	)
 )
 

@@ -16,7 +16,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include <list>
 
 #include "DatabaseManager/DatabaseCallback.h"
-#include "MathLib/Vector3.h"
 #include "ObjectFactoryCallback.h"
 #include "TangibleEnums.h"
 #include "WorldManager.h"
@@ -146,6 +145,7 @@ struct attributeDetail
 struct StructureDeedLink
 {
 	uint32	structure_type;
+	uint64	placementMask;
 	uint32	skill_Requirement;
 	uint32	repair_cost;
 	uint32	item_type;
@@ -173,10 +173,8 @@ struct StructureItemTemplate
 	string				name;
 	string				file;
 
-	Anh_Math::Vector3	mPosition;
-	Anh_Math::Vector3	mDirection;
-
-	float			dw;
+	glm::vec3	mPosition;
+	glm::quat	mDirection;
 };
 
 typedef		std::vector<StructureDeedLink*>		DeedLinkList;

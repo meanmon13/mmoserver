@@ -13,7 +13,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #pragma once
 
 #include "Common/MessageDispatchCallback.h"
-#include "MathLib/Vector3.h"
 #include "TangibleObject.h"
 
 #define gFireworkManager FireworkManager::getSingletonPtr()
@@ -45,7 +44,7 @@ public:
 
 
 	//bool createFirework(uint32 typeId, PlayerObject* player, bool isShow=false);
-	TangibleObject* createFirework(uint32 typeId, PlayerObject* player, Anh_Math::Vector3 position);
+	TangibleObject* createFirework(uint32 typeId, PlayerObject* player, const glm::vec3& position);
 
 
 protected:

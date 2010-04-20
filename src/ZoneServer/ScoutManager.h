@@ -13,7 +13,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #pragma once
 
 #include "AttackableCreature.h"
-#include "MathLib/Vector3.h"
 #include "Utils/typedefs.h"
 
 #define gScoutManager ScoutManager::getSingletonPtr()
@@ -61,7 +60,7 @@ public:
 	}
 
 	//camps
-	bool createCamp(uint32 typeId,uint64 parentId,Anh_Math::Vector3 position,string customName, PlayerObject* player);
+	bool createCamp(uint32 typeId,uint64 parentId, const glm::vec3& position, const string& customName, PlayerObject* player);
 
 	//foraging
 	static void successForage(PlayerObject* player);

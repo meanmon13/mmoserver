@@ -13,8 +13,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #define ANH_ZONESERVER_WEATHER_H
 
 #include "Utils/typedefs.h"
-#include "MathLib/Vector3.h"
-
+#include <glm/glm.hpp>
 
 //======================================================================================================================
 
@@ -25,8 +24,8 @@ class Weather
 		Weather() : mWeather(0) {}
 		~Weather(){}
 
-		uint32				mWeather;
-		Anh_Math::Vector3	mClouds;
+		uint32    mWeather;
+        glm::vec3 mClouds;
 };
 
 //======================================================================================================================

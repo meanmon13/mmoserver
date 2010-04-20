@@ -14,7 +14,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "TravelMapHandler.h"
 #include "WorldManager.h"
 #include "MessageLib/MessageLib.h"
-#include "MathLib/Quaternion.h"
+
 
 //=============================================================================
 
@@ -109,7 +109,7 @@ void Shuttle::useShuttle(PlayerObject* playerObject)
 			bool noTicket = gTravelMapHandler->findTicket(playerObject,port);
 
 			// in range check
-			if(playerObject->getParentId() != getParentId() || !playerObject->mPosition.inRange2D(mPosition,25.0f))
+            if(playerObject->getParentId() != getParentId() || (glm::distance(playerObject->mPosition, mPosition) > 25.0f))
 			{
 				gMessageLib->sendSystemMessage(playerObject,L"","travel","boarding_too_far");
 				return;

@@ -19,7 +19,6 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 #include "Common/Message.h"
 #include "Common/MessageFactory.h"
-#include "MathLib/Quaternion.h"
 
 //=============================================================================
 
@@ -45,12 +44,12 @@ MissionObject::MissionObject() : Object(0,0,"object/mission/shared_mission_objec
 	mWaypoint = new WaypointObject();
 	mWaypoint->setWPType(Waypoint_orange);
 
-	mStart.Coordinates = Anh_Math::Vector3();
+    mStart.Coordinates = glm::vec3();
 	mStart.CellID = 0;
 	mStart.PlanetCRC = 0;
 	mStartNPC = NULL;
 
-	mDestination.Coordinates = Anh_Math::Vector3();
+    mDestination.Coordinates = glm::vec3();
 	mDestination.CellID = 0;
 	mDestination.PlanetCRC = 0;	
 	mDestinationNPC	 = NULL;
@@ -88,12 +87,12 @@ MissionObject::MissionObject(PlayerObject * owner, uint64 parent_id) : Object(
 	mWaypoint->setId(mId+1);
 	mWaypoint->setWPType(Waypoint_orange);
 
-	mStart.Coordinates = Anh_Math::Vector3();
+    mStart.Coordinates = glm::vec3();
 	mStart.CellID = 0;
 	mStart.PlanetCRC = 0;
 	mStartNPC = NULL;
 
-	mDestination.Coordinates = Anh_Math::Vector3();
+    mDestination.Coordinates = glm::vec3();
 	mDestination.CellID = 0;
 	mDestination.PlanetCRC = 0;	
 	mDestinationNPC	 = NULL;
@@ -130,12 +129,12 @@ void MissionObject::clear()
 	mMissionType		= 0;		
 	mTarget				= "";
 	mNum				= 0;
-	mStart.Coordinates = Anh_Math::Vector3();
+    mStart.Coordinates = glm::vec3();
 	mStart.CellID = 0;
 	mStart.PlanetCRC = 0;
 	mStartNPC		= NULL;
 
-	mDestination.Coordinates = Anh_Math::Vector3();
+    mDestination.Coordinates = glm::vec3();
 	mDestination.CellID = 0;
 	mDestination.PlanetCRC = 0;	
 	mDestinationNPC	= NULL;

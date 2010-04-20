@@ -15,9 +15,10 @@ Copyright (c) 2006 - 2010 The swgANH Team
 #include "Common/MessageDispatchCallback.h"
 #include "TangibleObject.h"
 
-#define gFireworkManager FireworkManager::getSingletonPtr()
+#define gFireworkManager FireworkManager::Instance()
 
 class PlayerObject;
+class FireworkEvent;
 
 class FireworkManager
 {
@@ -42,6 +43,7 @@ public:
 		}
 	}
 
+	void Process();
 
 	//bool createFirework(uint32 typeId, PlayerObject* player, bool isShow=false);
 	TangibleObject* createFirework(uint32 typeId, PlayerObject* player, const glm::vec3& position);
@@ -53,6 +55,8 @@ protected:
 private:
 	static FireworkManager*	mSingleton;
 	
+	std::list<FireworkEvent*> fireworkEvents;
+
 	FireworkManager(){}
 	
 };

@@ -576,11 +576,8 @@ void WorldManager::addCreatureObjectForTimedDeletion(uint64 creatureId, uint64 w
 	mCreatureObjectDeletionMap.insert(std::make_pair(creatureId, expireTime + when));
 }
 
-}
-
 bool WorldManager::_handleVariousUpdates(uint64 callTime, void* ref)
 {
-	gForageManager->forageUpdate();
 	gFireworkManager->Process();
 	return true;
 }

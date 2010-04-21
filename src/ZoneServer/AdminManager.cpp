@@ -146,3 +146,8 @@ void AdminManager::unregisterCallbacks(void)
 	mMessageDispatch->UnregisterMessageCallback(opIsmCancelShutdown);
 	mMessageDispatch->unregisterSessionlessDispatchClient(AdminAccountId);
 }
+
+void AdminManager::handleDispatchMessage(uint32 opcode, Message* message, DispatchClient* client)
+{
+
+}

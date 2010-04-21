@@ -46,6 +46,8 @@ class AdminManager : public MessageDispatchCallback
 			}
 		}
 
+		void handleDispatchMessage(uint32 opcode, Message* message, DispatchClient* client);
+
 		void registerCallbacks(void);
 		void unregisterCallbacks(void);
 

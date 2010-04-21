@@ -126,6 +126,7 @@
     <ClCompile Include="Conversation.cpp" />
     <ClCompile Include="ConversationManager.cpp" />
     <ClCompile Include="CraftBatch.cpp" />
+    <ClCompile Include="CraftingManager.cpp" />
     <ClCompile Include="CraftingSession.cpp" />
     <ClCompile Include="CraftingSessionFactory.cpp" />
     <ClCompile Include="CraftingSessionHelper.cpp" />
@@ -332,6 +333,7 @@
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Wearable.cpp" />
     <ClCompile Include="WeightsBatch.cpp" />
+    <ClCompile Include="WorldClock.cpp" />
     <ClCompile Include="WorldConfig.cpp" />
     <ClCompile Include="WorldManager.cpp" />
     <ClCompile Include="WorldManagerDataBaseHandlers.cpp" />
@@ -384,6 +386,7 @@
     <ClInclude Include="ConversationManager.h" />
     <ClInclude Include="CraftBatch.h" />
     <ClInclude Include="CraftingEnums.h" />
+    <ClInclude Include="CraftingManager.h" />
     <ClInclude Include="CraftingSession.h" />
     <ClInclude Include="CraftingSessionCallBack.h" />
     <ClInclude Include="CraftingSessionFactory.h" />
@@ -566,6 +569,7 @@
     <ClInclude Include="Wearable.h" />
     <ClInclude Include="Weather.h" />
     <ClInclude Include="WeightsBatch.h" />
+    <ClInclude Include="WorldClock.h" />
     <ClInclude Include="WorldConfig.h" />
     <ClInclude Include="WorldManager.h" />
     <ClInclude Include="WorldManagerEnums.h" />

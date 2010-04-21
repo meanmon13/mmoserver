@@ -755,6 +755,12 @@
     <ClCompile Include="ZoneTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WorldClock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CraftingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveConversation.h">
@@ -1445,6 +1451,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ZoneTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CraftingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldClock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

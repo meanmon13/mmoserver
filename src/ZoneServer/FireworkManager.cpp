@@ -12,6 +12,7 @@ Copyright (c) 2006 - 2010 The swgANH Team
 
 #include "Item_Enums.h"
 #include "WorldManager.h"
+#include "WorldClock.h"
 #include "PlayerObject.h"
 #include "StaticObject.h"
 #include "UIManager.h"
@@ -111,7 +112,7 @@ TangibleObject* FireworkManager::createFirework(uint32 typeId, PlayerObject* pla
 	fevent->firework = firework;
 	fevent->player = player;
 	fevent->playerToldToStand = false;
-	fevent->timeFired = gWorldManager->GetCurrentGlobalTick();
+	fevent->timeFired = gWorldClock->GetCurrentGlobalTick();
 
 	this->fireworkEvents.push_back(fevent);
 
@@ -126,7 +127,7 @@ void FireworkManager::Process()
 	std::list<FireworkEvent*>::iterator fEnd = fireworkEvents.end();
 
 	//We can do this outside the while...We likely won't get a vastly different value while in it anyway.
-	uint64 currentTime = gWorldManager->GetCurrentGlobalTick();
+	uint64 currentTime = gWorldClock->GetCurrentGlobalTick();
 	while( it != fEnd)
 	{
 		if(*it && (currentTime - (*it)->timeFired) > 2000 && (*it)->playerToldToStand == false) //2 sec
